@@ -1,7 +1,7 @@
-import { IUseCase } from '../interfaces/models/usecase.interface';
-import { IUserRepository } from '../interfaces/repositories/user-repository.interface';
-import { User } from '../..//domain/entities/user.entity';
 import { Observable } from 'rxjs';
+import { User } from '../../../domain/user/entities/user.entity';
+import { IUseCase } from '../../../shared/interfaces/usecase.interface';
+import { IUserRepository } from '../../../shared/interfaces/user-repository.interface';
 
 /**
  * Caso de uso para listar todos los usuarios.

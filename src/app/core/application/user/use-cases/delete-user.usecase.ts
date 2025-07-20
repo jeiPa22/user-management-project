@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs';
-import { IUseCase } from '../interfaces/models/usecase.interface';
-import { IUserRepository } from '../interfaces/repositories/user-repository.interface';
-import { UserMapper } from '../mappers/user.mapper';
+import { IUseCase } from '../../../shared/interfaces/usecase.interface';
+import { IUserRepository } from '../../../shared/interfaces/user-repository.interface';
 
 /**
  * Caso de uso para eliminar un usuario.

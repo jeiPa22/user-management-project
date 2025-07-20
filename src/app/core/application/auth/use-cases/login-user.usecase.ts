@@ -1,6 +1,6 @@
-import { IUseCase } from '../../interfaces/models/usecase.interface';
-import { LoginInputDto, LoginOutputDto } from '../../dtos/login.dto';
 import { Observable, of, throwError } from 'rxjs';
+import { LoginInputDto, LoginOutputDto } from '../../../shared/dtos/login.dto';
+import { IUseCase } from '../../../shared/interfaces/usecase.interface';
 
 export class LoginUserUseCase
   implements IUseCase<LoginInputDto, LoginOutputDto>

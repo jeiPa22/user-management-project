@@ -1,9 +1,9 @@
-import { IUseCase } from '../interfaces/models/usecase.interface';
-import { IUserDto } from '../dtos/user.dto';
-import { IUserRepository } from '../interfaces/repositories/user-repository.interface';
-import { User } from '../../domain/entities/user.entity';
 import { Observable } from 'rxjs';
-import { UserMapper } from '../mappers/user.mapper';
+import { User } from '../../../domain/user/entities/user.entity';
+import { IUserDto } from '../../../shared/dtos/user.dto';
+import { IUseCase } from '../../../shared/interfaces/usecase.interface';
+import { IUserRepository } from '../../../shared/interfaces/user-repository.interface';
+import { UserMapper } from '../../../shared/mappers/user.mapper';
 
 /**
  * Caso de uso para actualizar un usuario.
