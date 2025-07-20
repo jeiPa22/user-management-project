@@ -9,19 +9,40 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from '../../../../core/domain/user/entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UserId } from '../../../../core/domain/user/value-objects/user-id.vo';
+import { UserRole } from '../../../../core/shared/constants/role.enum';
 
+/**
+ * Componente de formulario de usuario que permite crear o editar usuarios.
+ */
 @Component({
   selector: 'app-form-user',
   templateUrl: './form-user.component.html',
   styleUrl: './form-user.component.scss',
 })
 export class FormUserComponent {
+  /**
+   * Usuario a editar, si se proporciona.
+   */
   @Input() userToEdit?: User;
+  /**
+   * Evento que se emite al guardar un usuario.
+   */
   @Output() save = new EventEmitter<User>();
 
+  /**
+   * Formulario reactivo para manejar los datos del usuario.
+   */
   userForm: FormGroup;
-  roles = ['admin', 'cashier'];
 
+  /**
+   * Roles.
+   */
+  roles = Object.values(UserRole);
+
+  /**
+   * Constructor del componente de formulario de usuario.
+   * @param fb -> FormBuilder para crear formularios reactivos.
+   */
   constructor(private fb: FormBuilder) {
     this.userForm = this.fb.group({
       name: ['', Validators.required],
@@ -32,6 +53,10 @@ export class FormUserComponent {
     });
   }
 
+  /**
+   * Detecta cambios en las propiedades de entrada del componente.
+   * @param changes -> Cambios en las propiedades de entrada.
+   */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['userToEdit'] && this.userToEdit) {
       this.userForm.patchValue({
@@ -44,6 +69,9 @@ export class FormUserComponent {
     }
   }
 
+  /**
+   * Maneja el evento de envío del formulario.
+   */
   onSubmit(): void {
     if (this.userForm.valid) {
       const formValue = this.userForm.value;

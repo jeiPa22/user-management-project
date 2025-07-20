@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CountUserComponent } from './count-user.component';
 
 describe('CountUserComponent', () => {
@@ -8,16 +7,26 @@ describe('CountUserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CountUserComponent]
-    })
-    .compileComponents();
-    
+      declarations: [CountUserComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(CountUserComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('debería crear el componente correctamente', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('debería inicializar el conteo en 0 si no se pasa un valor', () => {
+    fixture.detectChanges();
+    expect(component.count).toBe(0);
+  });
+
+  it('debería mostrar el conteo cuando se pasa un valor como @Input', () => {
+    component.count = 5;
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('5');
   });
 });
