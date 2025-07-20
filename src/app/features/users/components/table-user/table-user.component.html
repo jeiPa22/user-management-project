@@ -1,0 +1,47 @@
+<div class="table-responsive shadow rounded p-5">
+  <table class="table table-hover align-middle table-bordered">
+    <thead class="table-light text-center">
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Puntos</th>
+        <th scope="col">Activo</th>
+        <th scope="col">Rol</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.name }}</td>
+        <td>{{ user.lastname }}</td>
+        <td class="text-center">{{ user.points }}</td>
+        <td class="text-center">
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-success': user.active,
+              'bg-danger': !user.active
+            }"
+          >
+            {{ user.active ? "Sí" : "No" }}
+          </span>
+        </td>
+        <td class="text-center">{{ user.role }}</td>
+        <td class="text-center">
+          <button
+            class="btn btn-sm btn-outline-primary me-2"
+            (click)="edit.emit(user)"
+          >
+            <i class="bi bi-pencil"></i> Editar
+          </button>
+          <button
+            class="btn btn-sm btn-outline-danger"
+            (click)="remove.emit(user)"
+          >
+            <i class="bi bi-trash"></i> Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

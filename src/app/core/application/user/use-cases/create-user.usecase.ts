@@ -3,17 +3,17 @@ import { User } from '../../../domain/user/entities/user.entity';
 import { UserId } from '../../../domain/user/value-objects/user-id.vo';
 import { IUserDto } from '../../../shared/dtos/user.dto';
 import { IUseCase } from '../../../shared/interfaces/usecase.interface';
-import { IUserRepository } from '../../../shared/interfaces/user-repository.interface';
+import { Injectable, inject } from '@angular/core';
+import { IUserRepository } from '../../../domain/user/repositories/user.repository';
 
 /**
  *  Caso de uso para crear un usuario.
  */
+@Injectable({
+  providedIn: 'root',
+})
 export class CreateUserUseCase implements IUseCase<IUserDto, User> {
-  /**
-   * Crea una instancia de CreateUserUseCase.
-   * @param userRepository -> Metodos crud para usuario.
-   */
-  constructor(private userRepository: IUserRepository) {}
+  private readonly userRepository = inject(IUserRepository);
 
   /**
    * Ejecuta la creacion de un usuario.

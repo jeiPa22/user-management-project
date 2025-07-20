@@ -1,24 +1,19 @@
-// src/app/core/infrastructure/auth/auth.guard.ts
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { AuthService } from './services/auth.service';
 
-import { IsUserAuthenticatedUseCase } from '../../application/auth/use-cases/is-user-authenticated.use-case';
-
-export const authGuard: CanActivateFn = (route, state): Observable<boolean> => {
+/**
+ * autorizacion de autenticación
+ * @returns -> true si el usuario está autenticado, de lo contrario redirige a /login
+ */
+export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
-  const isUserAuthenticatedUseCase = inject(IsUserAuthenticatedUseCase);
-
-  return isUserAuthenticatedUseCase.execute().pipe(
-    take(1),
-    map((isAuthenticated) => {
-      if (isAuthenticated) {
-        return true;
-      } else {
-        router.navigate(['/login']);
-        return false;
-      }
-    })
-  );
+  const authService = inject(AuthService);
+  const isAuth = authService.isAuthenticated();
+  if (isAuth) {
+    return true;
+  } else {
+    router.navigate(['/login']);
+    return false;
+  }
 };

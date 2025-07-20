@@ -1,0 +1,69 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label class="form-label">Nombre</label>
+    <input
+      type="text"
+      formControlName="name"
+      class="form-control"
+      placeholder="Ingrese nombre"
+    />
+    <div
+      *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched"
+      class="text-danger"
+    >
+      El nombre es obligatorio.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Apellido</label>
+    <input
+      type="text"
+      formControlName="lastname"
+      class="form-control"
+      placeholder="Ingrese apellido"
+    />
+    <div
+      *ngIf="
+        userForm.get('lastname')?.invalid && userForm.get('lastname')?.touched
+      "
+      class="text-danger"
+    >
+      El apellido es obligatorio.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Puntos</label>
+    <input type="number" formControlName="points" class="form-control" />
+    <div
+      *ngIf="userForm.get('points')?.invalid && userForm.get('points')?.touched"
+      class="text-danger"
+    >
+      Debe ser mayor o igual a 0.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Rol</label>
+    <select formControlName="role" class="form-select">
+      <option *ngFor="let role of roles" [value]="role">
+        {{ role }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-check mb-3">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      formControlName="active"
+      id="activeCheck"
+    />
+    <label class="form-check-label" for="activeCheck">Usuario activo</label>
+  </div>
+
+  <button type="submit" class="btn btn-success w-100">
+    {{ userToEdit ? "Actualizar Usuario" : "Crear Usuario" }}
+  </button>
+</form>

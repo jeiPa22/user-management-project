@@ -1,16 +1,17 @@
 import { Observable } from 'rxjs';
 import { IUseCase } from '../../../shared/interfaces/usecase.interface';
-import { IUserRepository } from '../../../shared/interfaces/user-repository.interface';
+import { IUserRepositorySSSSSS } from '../../../shared/interfaces/user-repository.interface';
+import { inject, Injectable } from '@angular/core';
+import { IUserRepository } from '../../../domain/user/repositories/user.repository';
 
 /**
  * Caso de uso para eliminar un usuario.
  */
+@Injectable({
+  providedIn: 'root',
+})
 export class DeleteUserUseCase implements IUseCase<string, boolean> {
-  /**
-   * Crea una instancia de DeleteUserUseCase.
-   * @param userRepository -> Metodos crud para usuario.
-   */
-  constructor(private userRepository: IUserRepository) {}
+  private readonly userRepository = inject(IUserRepository);
 
   /**
    * Ejecuta eliminación de usuario.

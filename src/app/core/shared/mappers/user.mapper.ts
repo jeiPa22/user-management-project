@@ -1,6 +1,5 @@
-import { User } from '../../domain/entities/user.entity';
-import { UserRole } from '../../domain/enums/role.enum';
-import { UserId } from '../../domain/value-objects/user-id.vo';
+import { User } from '../../domain/user/entities/user.entity';
+import { UserId } from '../../domain/user/value-objects/user-id.vo';
 import { IUserDto } from '../dtos/user.dto';
 
 /**

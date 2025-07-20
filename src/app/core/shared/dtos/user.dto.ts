@@ -1,4 +1,4 @@
-import { UserRole } from '../../domain/enums/role.enum';
+import { UserRole } from '../constants/role.enum';
 
 /**
  * Modelo usuario.

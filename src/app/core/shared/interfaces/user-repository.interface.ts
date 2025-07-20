@@ -1,10 +1,11 @@
 import { Observable } from 'rxjs';
-import { User } from '../../../domain/entities/user.entity';
+import { User } from '../../domain/user/entities/user.entity';
+import { InjectionToken } from '@angular/core';
 
 /**
  * Funciones definidas para usuario.
  */
-export interface IUserRepository {
+export interface IUserRepositorySSSSSS {
   /**
    * Obtener todos los usuarios.
    * @return -> Observable que emite un array de usuarios.
@@ -32,3 +33,6 @@ export interface IUserRepository {
    */
   delete(id: string): Observable<boolean>;
 }
+
+// Create the InjectionToken for IUserRepository
+export const USER_REPOSITORY_TOKEN = new InjectionToken<IUserRepositorySSSSSS>('IUserRepository');

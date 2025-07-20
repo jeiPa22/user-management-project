@@ -1,17 +1,17 @@
 import { Observable } from 'rxjs';
 import { User } from '../../../domain/user/entities/user.entity';
 import { IUseCase } from '../../../shared/interfaces/usecase.interface';
-import { IUserRepository } from '../../../shared/interfaces/user-repository.interface';
+import { IUserRepository } from '../../../domain/user/repositories/user.repository';
+import { inject, Injectable } from '@angular/core';
 
 /**
  * Caso de uso para listar todos los usuarios.
  */
+@Injectable({
+  providedIn: 'root',
+})
 export class ListUsersUseCase implements IUseCase<void, User[]> {
-  /**
-   * Crea una instancia de ListUsersUseCase.
-   * @param userRepository -> Metodos crud para usuario.
-   */
-  constructor(private userRepository: IUserRepository) {}
+  private readonly userRepository = inject(IUserRepository);
 
   /**
    * Ejecutar listar usuarios.

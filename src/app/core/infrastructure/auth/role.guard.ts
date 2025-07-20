@@ -1,12 +1,16 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UserRole } from '../../shared/constants/role.enum';
-import { AuthService } from '../../application/auth/services/auth.service';
+import { AuthService } from './services/auth.service';
 
+/**
+ * Guarda de roles que verifica si el usuario tiene el rol esperado
+ * @param route -> Ruta que contiene el rol esperado
+ * @returns -> true si el usuario tiene el rol esperado, de lo contrario redirige a /login
+ */
 export const roleGuard: CanActivateFn = (
-  route,
-  state
+  route
 ): boolean | Observable<boolean> => {
   const auth = inject(AuthService);
   const router = inject(Router);

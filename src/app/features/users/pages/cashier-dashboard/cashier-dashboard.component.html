@@ -1,0 +1,17 @@
+<app-dashboard-layout>
+  <div class="container py-4">
+    <!-- Contador y botón en una sola línea -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <app-count-user [count]="users.length"></app-count-user>
+      </div>
+    </div>
+
+    <!-- Tabla de usuarios -->
+    <div class="mb-4">
+      <div class="card mb-4">
+        <app-table-user [users]="users"></app-table-user>
+      </div>
+    </div>
+  </div>
+</app-dashboard-layout>
