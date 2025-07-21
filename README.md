@@ -2,6 +2,8 @@
 
 Aplicación web para gestionar usuarios con roles diferenciados (Administrador y Cajero), construida en Angular bajo principios DDD y arquitectura Hexagonal.
 
+![1_b88](https://github.com/user-attachments/assets/d69aadab-9a7c-4a8e-b1a5-715893e07a62)
+
 ## 📌 Funcionalidades
 
 - **Login único** (`/login`) con autenticación mock:
@@ -57,3 +59,5 @@ Este proyecto incluye pruebas unitarias para componentes, servicios, guards y ca
 ```bash
 ng test
 ````
+<img width="1920" height="951" alt="image" src="https://github.com/user-attachments/assets/88618425-a3d1-46ef-b40f-59de68036039" />
+
