@@ -9,6 +9,7 @@ import { DeleteUserUseCase } from '../../../../core/application/user/use-cases/d
 import { ListUsersUseCase } from '../../../../core/application/user/use-cases/list-users.usecase';
 import { UserId } from '../../../../core/domain/user/value-objects/user-id.vo';
 import { UserRole } from '../../../../core/shared/constants/role.enum';
+import { UserMapper } from '../../../../core/shared/mappers/user.mapper';
 
 describe('AdminDashboardComponent', () => {
   let component: AdminDashboardComponent;
@@ -39,7 +40,7 @@ describe('AdminDashboardComponent', () => {
         { provide: UpdateUserUseCase, useValue: updateUserUseCaseSpy },
         { provide: DeleteUserUseCase, useValue: deleteUserUseCaseSpy },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA], // evita errores por elementos desconocidos como app-dashboard-layout
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
 
@@ -47,7 +48,6 @@ describe('AdminDashboardComponent', () => {
     fixture = TestBed.createComponent(AdminDashboardComponent);
     component = fixture.componentInstance;
 
-    // Simula elementos de ViewChild
     component.userModalRef = new ElementRef(document.createElement('div'));
     component.openModalBtn = new ElementRef(document.createElement('button'));
 
@@ -60,7 +60,7 @@ describe('AdminDashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('debería cargar usuarios en ngOnInit', () => {
+  it('debería cargar usuarios en loadUsers', () => {
     const users = [
       new User(new UserId('1'), 'Juan', 'Pérez', 100, true, UserRole.Cashier),
     ];
@@ -72,7 +72,7 @@ describe('AdminDashboardComponent', () => {
     expect(component.users).toEqual(users);
   });
 
-  it('debería eliminar usuario', () => {
+  it('debería eliminar usuario correctamente', () => {
     const user = new User(
       new UserId('1'),
       'Juan',
@@ -89,10 +89,12 @@ describe('AdminDashboardComponent', () => {
   });
 
   it('debería abrir el modal para crear usuario', () => {
-    spyOn(component as any, 'onOpenModal');
+    spyOn(component, 'onOpenModal').and.callThrough();
+
     component.openCreateUser();
+
     expect(component.selectedUser).toBeUndefined();
-    expect((component as any).onOpenModal).toHaveBeenCalled();
+    expect(component.onOpenModal).toHaveBeenCalled();
   });
 
   it('debería abrir el modal para editar usuario', () => {
@@ -104,9 +106,86 @@ describe('AdminDashboardComponent', () => {
       true,
       UserRole.Cashier
     );
-    spyOn(component as any, 'onOpenModal');
+    spyOn(component, 'onOpenModal').and.callThrough();
+
     component.editUser(user);
+
     expect(component.selectedUser).toEqual(user);
-    expect((component as any).onOpenModal).toHaveBeenCalled();
+    expect(component.onOpenModal).toHaveBeenCalled();
+  });
+
+  it('onOpenModal debería mostrar el modal', () => {
+    // Crear un mock para bsModal.show()
+    component['bsModal'] = { show: jasmine.createSpy('show') } as any;
+
+    component.onOpenModal();
+
+    expect(component['bsModal'].show).toHaveBeenCalled();
+  });
+
+  it('onCloseModal debería ocultar el modal y enfocar el botón', () => {
+    component['bsModal'] = { hide: jasmine.createSpy('hide') } as any;
+    const focusSpy = spyOn(component.openModalBtn.nativeElement, 'focus');
+
+    component.onCloseModal();
+
+    expect(component['bsModal'].hide).toHaveBeenCalled();
+    expect(focusSpy).toHaveBeenCalled();
+  });
+
+  it('saveUser debería crear un usuario cuando no existe', () => {
+    const newUser = new User(
+      new UserId('1'),
+      'Juan',
+      'Pérez',
+      100,
+      true,
+      UserRole.Admin
+    );
+
+    const mockUser = newUser; // o algún user válido
+
+    createUserUseCaseSpy.execute.and.returnValue(of(mockUser));
+    spyOn(component, 'onCloseModal').and.callThrough();
+    spyOn(component, 'loadUsers').and.callThrough();
+
+    component.users = [];
+
+    component.saveUser(newUser);
+
+    expect(component.onCloseModal).toHaveBeenCalled();
+    expect(createUserUseCaseSpy.execute).toHaveBeenCalledWith(
+      UserMapper.toDto(newUser)
+    );
+    expect(component.loadUsers).toHaveBeenCalled();
+    expect(component.selectedUser).toBeUndefined();
+  });
+
+  it('saveUser debería actualizar un usuario cuando ya existe', () => {
+    const existingUser = new User(
+      new UserId('1'),
+      'Juan',
+      'Pérez',
+      100,
+      true,
+      UserRole.Admin
+    );
+
+    const mockUser = existingUser;
+
+    updateUserUseCaseSpy.execute.and.returnValue(of(mockUser));
+    spyOn(component, 'onCloseModal').and.callThrough();
+    spyOn(component, 'loadUsers').and.callThrough();
+
+    component.users = [existingUser];
+
+    component.saveUser(existingUser);
+
+    expect(component.onCloseModal).toHaveBeenCalled();
+    expect(updateUserUseCaseSpy.execute).toHaveBeenCalledWith(
+      UserMapper.toDto(existingUser)
+    );
+    expect(component.loadUsers).toHaveBeenCalled();
+    expect(component.selectedUser).toBeUndefined();
   });
 });

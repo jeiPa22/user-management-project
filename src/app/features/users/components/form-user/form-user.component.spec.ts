@@ -114,4 +114,31 @@ describe('FormUserComponent', () => {
       active: true,
     });
   });
+
+  it('debería marcar el campo "name" como requerido si está vacío', () => {
+    const nameControl = component.userForm.get('name');
+    nameControl?.setValue('');
+    expect(nameControl?.valid).toBeFalse();
+    expect(nameControl?.errors?.['required']).toBeTrue();
+  });
+
+  it('no debería emitir si el formulario es inválido', () => {
+    const spyEmit = spyOn(component.save, 'emit');
+    component.userForm.setValue({
+      name: '',
+      lastname: '',
+      points: -5,
+      role: '',
+      active: true,
+    });
+    component.onSubmit();
+    expect(spyEmit).not.toHaveBeenCalled();
+  });
+
+  it('debería marcar error si "points" es menor a 0', () => {
+    const pointsControl = component.userForm.get('points');
+    pointsControl?.setValue(-1);
+    expect(pointsControl?.valid).toBeFalse();
+    expect(pointsControl?.errors?.['min']).toBeTruthy();
+  });
 });
