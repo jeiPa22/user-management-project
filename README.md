@@ -59,5 +59,6 @@ Este proyecto incluye pruebas unitarias para componentes, servicios, guards y ca
 ```bash
 ng test
 ````
-<img width="1920" height="951" alt="image" src="https://github.com/user-attachments/assets/88618425-a3d1-46ef-b40f-59de68036039" />
+<img width="597" height="122" alt="image" src="https://github.com/user-attachments/assets/e2310967-71df-4271-92cd-974194030de3" />
+
 
