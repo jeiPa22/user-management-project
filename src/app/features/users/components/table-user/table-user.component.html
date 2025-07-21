@@ -7,7 +7,7 @@
         <th scope="col">Puntos</th>
         <th scope="col">Activo</th>
         <th scope="col">Rol</th>
-        <th scope="col">Acciones</th>
+        <th *ngIf="currentUserRole === UserRole.Admin">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -27,7 +27,7 @@
           </span>
         </td>
         <td class="text-center">{{ user.role }}</td>
-        <td class="text-center">
+        <td class="text-center" *ngIf="currentUserRole === UserRole.Admin">
           <button
             class="btn btn-sm btn-outline-primary me-2"
             (click)="edit.emit(user)"

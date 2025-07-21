@@ -82,7 +82,7 @@ describe('AuthService', () => {
   });
 
   it('debería retornar null si no hay autenticación', () => {
-    expect(service.getUserRole()).toBeNull();
+    expect(service.getUserRole()).toBeFalsy();
   });
 
   it('debería eliminar la autenticación al cerrar sesión', () => {

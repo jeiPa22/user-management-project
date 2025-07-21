@@ -1,4 +1,5 @@
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <!-- Nombre -->
   <div class="mb-3">
     <label class="form-label">Nombre</label>
     <input
@@ -8,13 +9,22 @@
       placeholder="Ingrese nombre"
     />
     <div
-      *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched"
+      *ngIf="userForm.get('name')?.touched && userForm.get('name')?.invalid"
       class="text-danger"
     >
-      El nombre es obligatorio.
+      <div *ngIf="userForm.get('name')?.errors?.['required']">
+        El nombre es obligatorio.
+      </div>
+      <div *ngIf="userForm.get('name')?.errors?.['minlength']">
+        Debe tener al menos 2 caracteres.
+      </div>
+      <div *ngIf="userForm.get('name')?.errors?.['pattern']">
+        Solo letras y espacios permitidos.
+      </div>
     </div>
   </div>
 
+  <!-- Apellido -->
   <div class="mb-3">
     <label class="form-label">Apellido</label>
     <input
@@ -25,22 +35,39 @@
     />
     <div
       *ngIf="
-        userForm.get('lastname')?.invalid && userForm.get('lastname')?.touched
+        userForm.get('lastname')?.touched && userForm.get('lastname')?.invalid
       "
       class="text-danger"
     >
-      El apellido es obligatorio.
+      <div *ngIf="userForm.get('lastname')?.errors?.['required']">
+        El apellido es obligatorio.
+      </div>
+      <div *ngIf="userForm.get('lastname')?.errors?.['minlength']">
+        Debe tener al menos 2 caracteres.
+      </div>
+      <div *ngIf="userForm.get('lastname')?.errors?.['pattern']">
+        Solo letras y espacios permitidos.
+      </div>
     </div>
   </div>
 
+  <!-- Puntos -->
   <div class="mb-3">
     <label class="form-label">Puntos</label>
     <input type="number" formControlName="points" class="form-control" />
     <div
-      *ngIf="userForm.get('points')?.invalid && userForm.get('points')?.touched"
+      *ngIf="userForm.get('points')?.touched && userForm.get('points')?.invalid"
       class="text-danger"
     >
-      Debe ser mayor o igual a 0.
+      <div *ngIf="userForm.get('points')?.errors?.['required']">
+        Los puntos son obligatorios.
+      </div>
+      <div *ngIf="userForm.get('points')?.errors?.['min']">
+        Debe ser mayor o igual a 0.
+      </div>
+      <div *ngIf="userForm.get('points')?.errors?.['pattern']">
+        Solo números enteros válidos.
+      </div>
     </div>
   </div>
 
@@ -63,7 +90,11 @@
     <label class="form-check-label" for="activeCheck">Usuario activo</label>
   </div>
 
-  <button type="submit" class="btn btn-success w-100">
+  <button
+    type="submit"
+    class="btn btn-success w-100"
+    [disabled]="userForm.invalid"
+  >
     {{ userToEdit ? "Actualizar Usuario" : "Crear Usuario" }}
   </button>
 </form>

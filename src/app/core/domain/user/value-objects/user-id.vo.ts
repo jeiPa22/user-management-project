@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { generateUuid } from '../../../shared/utils/uuid.util';
 
 /**
  * Objeto valor identificador de usuario.
@@ -14,7 +14,7 @@ export class UserId {
    * @param id -> Identificador único del usuario.
    */
   constructor(id?: string) {
-    this.value = id ?? uuidv4();
+    this.value = id ?? generateUuid();
   }
 
   /**

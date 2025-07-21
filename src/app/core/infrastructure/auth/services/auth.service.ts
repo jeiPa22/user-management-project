@@ -68,9 +68,9 @@ export class AuthService {
   /**
    * Devuelve el rol del usuario autenticado
    */
-  getUserRole(): UserRole | null {
+  getUserRole(): UserRole | undefined {
     const data = localStorage.getItem('auth');
-    if (!data) return null;
+    if (!data) return undefined;
     return JSON.parse(data).role;
   }
 

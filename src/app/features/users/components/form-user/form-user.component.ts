@@ -45,9 +45,26 @@ export class FormUserComponent {
    */
   constructor(private fb: FormBuilder) {
     this.userForm = this.fb.group({
-      name: ['', Validators.required],
-      lastname: ['', Validators.required],
-      points: [0, [Validators.required, Validators.min(0)]],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/),
+        ],
+      ],
+      lastname: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/),
+        ],
+      ],
+      points: [
+        0,
+        [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)],
+      ],
       role: ['cashier', Validators.required],
       active: [true],
     });
