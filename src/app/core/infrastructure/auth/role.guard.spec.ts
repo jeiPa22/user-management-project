@@ -1,58 +1,148 @@
-// src/app/core/infrastructure/auth/role.guard.spec.ts
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import {
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+} from '@angular/router';
+import { of } from 'rxjs';
 import { roleGuard } from './role.guard';
 import { AuthService } from './services/auth.service';
 import { UserRole } from '../../shared/constants/role.enum';
 
+class MockAuthService {
+  isAuthenticated = jasmine.createSpy('isAuthenticated');
+  getUserRole = jasmine.createSpy('getUserRole');
+}
+
+class MockRouter {
+  navigate = jasmine.createSpy('navigate');
+}
+
 describe('roleGuard', () => {
-  let routerSpy: jasmine.SpyObj<Router>;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let authService: MockAuthService;
+  let router: MockRouter;
 
   beforeEach(() => {
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-    authServiceSpy = jasmine.createSpyObj('AuthService', [
-      'isAuthenticated',
-      'getUserRole',
-    ]);
-
     TestBed.configureTestingModule({
       providers: [
-        { provide: Router, useValue: routerSpy },
-        { provide: AuthService, useValue: authServiceSpy },
+        { provide: AuthService, useClass: MockAuthService },
+        { provide: Router, useClass: MockRouter },
       ],
     });
+
+    authService = TestBed.inject(AuthService) as unknown as MockAuthService;
+    router = TestBed.inject(Router) as unknown as MockRouter;
   });
 
-  const makeRouteMock = (expectedRole: UserRole) =>
-    ({ data: { expectedRole } } as any);
+  it('debería redirigir a /login y retornar false si el usuario no está autenticado', () => {
+    authService.isAuthenticated.and.returnValue(false);
 
-  it('debería permitir acceso si el usuario tiene el rol esperado', () => {
-    authServiceSpy.isAuthenticated.and.returnValue(true);
-    authServiceSpy.getUserRole.and.returnValue(UserRole.Admin);
+    const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {
+      url: [],
+      params: {},
+      queryParams: {},
+      fragment: null,
+      data: { expectedRole: UserRole.Admin },
+      outlet: 'primary',
+      component: null,
+      routeConfig: null,
+      root: null as any,
+      parent: null,
+      firstChild: null,
+      children: [],
+      pathFromRoot: [],
+      paramMap: of({} as any) as any,
+      queryParamMap: of({} as any) as any,
+      title: undefined,
+    };
 
-    const result = roleGuard(makeRouteMock(UserRole.Admin), null as any);
+    const mockRouterStateSnapshot: RouterStateSnapshot = {
+      url: '/',
+      root: mockActivatedRouteSnapshot,
+    };
 
+    const result = TestBed.runInInjectionContext(() =>
+      roleGuard(mockActivatedRouteSnapshot, mockRouterStateSnapshot)
+    );
+
+    expect(authService.isAuthenticated).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    expect(result).toBeFalse();
+  });
+
+  it('debería redirigir a /login y retornar false si el rol del usuario no coincide con el esperado', () => {
+    authService.isAuthenticated.and.returnValue(true);
+    authService.getUserRole.and.returnValue(UserRole.Cashier);
+
+    const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {
+      url: [],
+      params: {},
+      queryParams: {},
+      fragment: null,
+      data: { expectedRole: UserRole.Admin },
+      outlet: 'primary',
+      component: null,
+      routeConfig: null,
+      root: null as any,
+      parent: null,
+      firstChild: null,
+      children: [],
+      pathFromRoot: [],
+      paramMap: of({} as any) as any,
+      queryParamMap: of({} as any) as any,
+      title: undefined,
+    };
+
+    const mockRouterStateSnapshot: RouterStateSnapshot = {
+      url: '/',
+      root: mockActivatedRouteSnapshot,
+    };
+
+    const result = TestBed.runInInjectionContext(() =>
+      roleGuard(mockActivatedRouteSnapshot, mockRouterStateSnapshot)
+    );
+
+    expect(authService.isAuthenticated).toHaveBeenCalled();
+    expect(authService.getUserRole).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    expect(result).toBeFalse();
+  });
+
+  it('debería retornar true y no redirigir si el usuario está autenticado y tiene el rol esperado', () => {
+    authService.isAuthenticated.and.returnValue(true);
+    authService.getUserRole.and.returnValue(UserRole.Admin);
+
+    const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {
+      url: [],
+      params: {},
+      queryParams: {},
+      fragment: null,
+      data: { expectedRole: UserRole.Admin },
+      outlet: 'primary',
+      component: null,
+      routeConfig: null,
+      root: null as any,
+      parent: null,
+      firstChild: null,
+      children: [],
+      pathFromRoot: [],
+      paramMap: of({} as any) as any,
+      queryParamMap: of({} as any) as any,
+      title: undefined,
+    };
+
+    const mockRouterStateSnapshot: RouterStateSnapshot = {
+      url: '/',
+      root: mockActivatedRouteSnapshot,
+    };
+
+    const result = TestBed.runInInjectionContext(() =>
+      roleGuard(mockActivatedRouteSnapshot, mockRouterStateSnapshot)
+    );
+
+    expect(authService.isAuthenticated).toHaveBeenCalled();
+    expect(authService.getUserRole).toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
     expect(result).toBeTrue();
-    expect(routerSpy.navigate).not.toHaveBeenCalled();
-  });
-
-  it('debería redirigir si el usuario no está autenticado', () => {
-    authServiceSpy.isAuthenticated.and.returnValue(false);
-
-    const result = roleGuard(makeRouteMock(UserRole.Admin), null as any);
-
-    expect(result).toBeFalse();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
-  });
-
-  it('debería redirigir si el usuario tiene un rol incorrecto', () => {
-    authServiceSpy.isAuthenticated.and.returnValue(true);
-    authServiceSpy.getUserRole.and.returnValue(UserRole.Cashier);
-
-    const result = roleGuard(makeRouteMock(UserRole.Admin), null as any);
-
-    expect(result).toBeFalse();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
   });
 });

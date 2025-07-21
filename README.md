@@ -1,27 +1,59 @@
-# UserManagementApp
+# User Management App (Angular + Hexagonal Architecture)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+Aplicación web para gestionar usuarios con roles diferenciados (Administrador y Cajero), construida en Angular bajo principios DDD y arquitectura Hexagonal.
 
-## Development server
+## 📌 Funcionalidades
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Login único** (`/login`) con autenticación mock:
 
-## Code scaffolding
+  - Admin: `Admin / LealAdmin` → `/dashboard/admin`
+  - Cajero: `Cajero / LealCajero` → `/dashboard/cajero`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Rol Admin**:
 
-## Build
+  - Ver usuarios
+  - Crear usuario
+  - Editar usuario
+  - Eliminar usuario
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- **Rol Cajero**:
 
-## Running unit tests
+  - Solo puede visualizar la lista de usuarios
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- **Estado persistente**:
 
-## Running end-to-end tests
+  - Toda la información se almacena en `LocalStorage`
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- **Seguridad**:
+  - Guard de autenticación protege rutas privadas
 
-## Further help
+## 🧱 Arquitectura
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- **Domain**: Entidades, Value Objects, Interfaces
+- **Application**: Casos de uso (`UseCases`)
+- **Infrastructure**: Repositorio + servicios
+- **UI**: Componentes, páginas, layouts (Angular sin standalone)
+
+## 🧪 Tecnologías
+
+- Angular
+- RxJS
+- Boostrap
+- LocalStorage (mock de base de datos)
+- UUID para generar IDs únicos
+
+## 🚀 Inicio rápido
+
+````bash
+npm install
+npm start
+
+## 🧪 Ejecución de pruebas
+
+Este proyecto incluye pruebas unitarias para componentes, servicios, guards y casos de uso. Usa el framework de pruebas integrado en Angular (Karma + Jasmine).
+
+### ▶️ Ejecutar pruebas unitarias
+
+```bash
+ng test
+````
