@@ -2,7 +2,7 @@
 
 Aplicación web para gestionar usuarios con roles diferenciados (Administrador y Cajero), construida en Angular bajo principios DDD y arquitectura Hexagonal.
 
-![1_b88](https://github.com/user-attachments/assets/d69aadab-9a7c-4a8e-b1a5-715893e07a62)
+<img width="1563" height="782" alt="image" src="https://github.com/user-attachments/assets/876943f0-31e8-4f71-8d35-947455a24a25" />
 
 ## 📌 Funcionalidades
 
